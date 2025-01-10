@@ -37,7 +37,6 @@ def entries():
 @app.route('/api/entries/<int:id>', methods=['DELETE'])
 def delete_entry(id):
     entry = DiaryEntry.query.get_or_404(id)
-    print(entry)
     db.session.delete(entry)
     db.session.commit()
     return jsonify({'message': 'Entry deleted successfully!'}), 200
