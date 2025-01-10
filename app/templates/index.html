@@ -1,48 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Couple Diary</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="[[url_for('static', filename='css/style.css')]]">
+    <title>情侣日记</title>
+    <!-- 在 Vue 3 脚本之前引入 jQuery 和 Popper.js -->
+    <script src="[[ url_for('static', filename='js/jquery.min.js') ]]"></script>
+    <script src="[[ url_for('static', filename='js/popper.min.js') ]]"></script>
+    <script src="[[ url_for('static', filename='js/bootstrap.min.js') ]]"></script>
+    <script src="[[ url_for('static', filename='js/vue.global.js') ]]"></script>
+    <script src="[[ url_for('static', filename='js/add_entry.js') ]]"></script>
+    <link rel="stylesheet" href="[[ url_for('static', filename='css/bootstrap.min.css') ]]">
+    <link rel="stylesheet" href="[[ url_for('static', filename='css/style.css') ]]">
 </head>
 <body>
-    <div id="app" class="container">
-        <h1 class="text-center">Couple Diary</h1>
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <form @submit.prevent="addEntry">
-                    <div class="form-group">
-                        <label for="date">Date</label>
-                        <input type="date" class="form-control" id="date" v-model="newEntry.date" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="image">Image URL</label>
-                        <input type="text" class="form-control" id="image" v-model="newEntry.image" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="description">Description</label>
-                        <textarea class="form-control" id="description" v-model="newEntry.description" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Add Entry</button>
-                </form>
-            </div>
-        </div>
-        <div class="row mt-4">
-            <div class="col-md-6 offset-md-3">
-                <div class="card" v-for="entry in entries" :key="entry.id">
-                    <img :src="entry.image" class="card-img-top" alt="Entry Image">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ entry.date }}</h5>
-                        <p class="card-text">{{ entry.description }}</p>
-                        <button @click="deleteEntry(entry.id)" class="btn btn-danger">Delete</button>
+    <div id="app">
+        <!-- 导航栏 -->
+        <nav class="navbar navbar-light bg-light mb-4">
+            <a class="navbar-brand" href="#">情侣日记</a>
+            <a href="/add" class="btn btn-primary">添加记录</a>
+        </nav>
+
+        <!-- 图片流 -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4" v-for="entry in entries" :key="entry.id">
+                    <div class="card">
+                        <img :src="entry.image" class="card-img-top" alt="记录图片">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ entry.date }}</h5>
+                            <p class="card-text">{{ entry.description }}</p>
+                            <button @click="deleteEntry(entry.id)" class="btn btn-danger">删除</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-    <script src="[[url_for('static', filename='js/app.js')]]"></script>
+
+    <script src="[[ url_for('static', filename='js/vue.global.js') ]]"></script>
+    <script src="[[ url_for('static', filename='js/app.js') ]]"></script>
 </body>
 </html>

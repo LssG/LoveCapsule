@@ -1,48 +1,32 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const app = new Vue({
-        el: '#app',
-        data: {
-            entries: [],
-            newEntry: {
-                date: '',
-                image: '',
-                description: ''
-            }
-        },
-        methods: {
-            fetchEntries() {
-                fetch('/api/entries')
-                    .then(response => response.json())
-                    .then(data => {
-                        this.entries = data;
-                    });
-            },
-            addEntry() {
-                fetch('/api/entries', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(this.newEntry)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    this.fetchEntries();
-                    this.newEntry = { date: '', image: '', description: '' };
-                });
-            },
-            deleteEntry(id) {
-                fetch(`/api/entries/${id}`, {
-                    method: 'DELETE'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    this.fetchEntries();
-                });
-            }
-        },
-        mounted() {
-            this.fetchEntries();
-        }
-    });
-});
+const { createApp, ref, onMounted } = Vue;
+
+createApp({
+    setup() {
+        const entries = ref([]);
+
+        // 获取所有点滴记录
+        const fetchEntries = async () => {
+            const response = await fetch('/api/entries');
+            const data = await response.json();
+            entries.value = data;
+        };
+
+        // 删除点滴记录
+        const deleteEntry = async (id) => {
+            await fetch(`/api/entries/${id}`, {
+                method: 'DELETE'
+            });
+            fetchEntries(); // 重新加载数据
+        };
+
+        // 组件挂载时加载数据
+        onMounted(() => {
+            fetchEntries();
+        });
+
+        return {
+            entries,
+            deleteEntry
+        };
+    }
+}).mount('#app');

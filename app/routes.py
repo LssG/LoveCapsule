@@ -6,6 +6,10 @@ from app.models import DiaryEntry
 def index():
     return render_template('index.html')
 
+@app.route('/add')
+def add_entry_page():
+    return render_template('add_entry.html')
+
 @app.route('/api/entries', methods=['GET', 'POST'])
 def entries():
     if request.method == 'GET':
@@ -33,6 +37,7 @@ def entries():
 @app.route('/api/entries/<int:id>', methods=['DELETE'])
 def delete_entry(id):
     entry = DiaryEntry.query.get_or_404(id)
+    print(entry)
     db.session.delete(entry)
     db.session.commit()
     return jsonify({'message': 'Entry deleted successfully!'}), 200
