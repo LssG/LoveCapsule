@@ -1,10 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
     const { createApp, ref } = Vue;
 
-    createApp({
+    const app = createApp({
         setup() {
+            // 获取当前日期
+            const getCurrentDate = () => {
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0'); // 月份从 0 开始，需要加 1
+                const day = String(today.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            };
+
             const newEntry = ref({
-                date: '',
+                date: getCurrentDate(),  // 默认日期为当天
                 image: null,  // 用于存储文件对象
                 description: ''
             });
@@ -27,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 const data = await response.json();
                 alert(data.message); // 提示添加成功
-                newEntry.value = { date: '', image: null, description: '' }; // 清空表单
+                newEntry.value = { date: getCurrentDate(), image: null, description: '' }; // 清空表单
             };
 
             return {
@@ -36,5 +45,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 addEntry
             };
         }
-    }).mount('#app');
+    });
+
+    // 确保 #app 元素存在
+    const mountElement = document.getElementById('app');
+    if (mountElement) {
+        app.mount('#app');
+    } else {
+        console.warn('Mount element (#app) not found.');
+    }
 });
